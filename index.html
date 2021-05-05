@@ -1,24 +1,42 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
     <meta charset="UTF-8">
     <title>Graphe de précédence</title>
+    <meta name="description" content="Site de fou">
     <script src="index.js"></script>
     <script src="drawGraph.js"></script>
+    <link rel="stylesheet" href="style.css" />
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script&display=swap" rel="stylesheet">
 </head>
 <body>
-<label>
-    <textarea id="textArea" style="width: 400px;height: 300px"></textarea>
-</label>
-<canvas id="titatitutu" width="800px">
-
-</canvas>
-
-<p id="nbrMot">Il y a : n mots</p>
+<div>
+    <h1>Modélisation d'un graphe de précédence</h1>
+    <label>
+        <textarea id="textArea"></textarea>
+    </label>
+    <p id="nbrMot">Il y a : <span>15</span> mots</p>
+    <div class="container">
+        <canvas id="titatitutu"></canvas>
+    </div>
+    <div class="hide">
+        <img src="assets/images/titi.gif" alt="titi" height="301" width="378">
+        Site optimisé en 1024x768
+    </div>
+</div>
 <script>
     let TX = [];
     let TY = [];
-    prout("titatitutu", "textArea")
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+    if (urlParams.get('style') === "wow") {
+        document.body.className = "wow"
+        prout("titatitutu", "textArea", "blue")
+    } else {
+        prout("titatitutu", "textArea", "blue")
+    }
+
 </script>
 </body>
 </html>

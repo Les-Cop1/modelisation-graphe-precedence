@@ -122,7 +122,7 @@ function Dessiner_RECT( ctx, XD, YD, WW, HH, p_Color ) {
 } // >>>> Dessiner_RECT
 
 function Dessiner_TACHE( ctx, p_X, p_Y, p_Nom, p_Color  ) {
-    Dessiner_RECT( ctx, p_X, p_Y , 40, 40, "blue" );
+    Dessiner_RECT( ctx, p_X, p_Y , 40, 40, p_Color );
 
     ctx.beginPath();
     ctx.font = '18px serif';
