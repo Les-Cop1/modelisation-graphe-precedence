@@ -2,7 +2,7 @@ function prout(canvas, area, style) {
     let textArea = document.getElementById(area)
     textArea.addEventListener("keyup", () => {
         Clear_Canvas(canvas)
-        let args = textArea.value.split(/\n/).filter((e) => e)
+        let args = textArea.value.split(' ').join('').split(/\n/).filter((e) => e)
         let canvasA = document.getElementById(canvas);
         let ctxA = canvasA.getContext("2d");
         let blocs = []
@@ -53,37 +53,41 @@ function prout(canvas, area, style) {
         }
 
         args.map((x) => {
-            if (!x.includes(" < ")) {
-                blocs.push(x)
+            if (!x.includes("<")) {
+                if (!blocs.includes(x))
+                    blocs.push(x)
             } else {
                 //récupère les flèches exemple : T1<T2
-                let arrow = x.split(" < ")
+                let arrow = x.split("<")
                 const start = arrow[0]
                 const end = arrow[1]
+                //même si l'optimisation vas la viré ca fait des vérification en moins
+                if (start !== end && blocs.includes(start) && blocs.includes(end)) {
+                    if (destination[[start]] === undefined)
+                        destination[[start]] = []
 
-                if (destination[[start]] === undefined)
-                    destination[[start]] = []
-                destination[[start]].push(end)
+                    destination[[start]].push(end)
 
-                optimise()
+                    optimise()
+                }
             }
         })
 
-        blocs.map((x) => {
+        blocs.map((x) => {//a modifier il faut  check si dans la liste des destination ils peux aller a plusieurs endroit
+            //dans ce cas il faut mettre en bas ou a droite ou en diagonale en bas
             TX.push(TX.length * 100)
             TY.push(20)
             Tache(ctxA, TX.length - 1, x, style);
         })
+
         blocs.map((x) => {
-            console.log(destination[[x]])
             if (destination[[x]] !== undefined) {
                 destination[[x]].map((yuyu) => {
-                    console.log("start : ", blocs.indexOf(x) + 1)
-                    console.log("end : ", blocs.indexOf(yuyu) + 1)
                     Fleche_DG(ctxA, blocs.indexOf(x), blocs.indexOf(yuyu), style);
                 })
             }
         })
+        console.log("Destination possible :", destination)
 
 
 // TODO : Afficher le nombre de mots
@@ -94,21 +98,4 @@ function prout(canvas, area, style) {
         TX = []
         TY = []
     });
-}
-
-function removeUselessArrow(arrows, tache) {
-    let arrowWith = arrows.filter(function (item) {
-        return item.indexOf(tache) === 0;
-    })
-
-    //lors l'ajout d'une tache je check si il peux pas deja y aller
-    //pour trouvé les liens sur le quel il peux y aller je regarde ses éléments de sortie et tant qu'il en a il les retourne
-
-    console.log(arrowWith)
-    // arrowWith.map((x)=>{
-    //     removeUselessArrow(arrows,x.split("<")[1])
-    // })
-
-
-    return arrows
 }
