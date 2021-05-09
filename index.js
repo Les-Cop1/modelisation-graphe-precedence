@@ -136,6 +136,16 @@ function Dessiner_TACHE( ctx, p_X, p_Y, p_Nom, p_Color  ) {
     ctx.closePath();
 } // >>>> Dessiner_TACHE
 
+function PoseTache( ctx, p_NX, p_NY, p_Nom, p_Color ) {
+    const BD = 40;
+    const DX = 80;
+    const DY = 80;
+    const PosX = BD + p_NX * DX;
+    const PosY = BD + p_NY  * DY;
+    console.log("p_Color",p_Color)
+    Dessiner_TACHE( ctx, PosX, PosY, p_Nom, p_Color );
+}
+
 function Tache( ctx, p_Num, p_Nom, p_Color  ) {
     Dessiner_TACHE( ctx, TX[ p_Num ], TY[ p_Num ], p_Nom, p_Color  );
 } // >>>> Tache

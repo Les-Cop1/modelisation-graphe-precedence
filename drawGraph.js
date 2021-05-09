@@ -1,11 +1,13 @@
-function prout(canvas, area, style) {
+function drawGraph(canvas, area, style) {
     let textArea = document.getElementById(area)
     textArea.addEventListener("keyup", () => {
         Clear_Canvas(canvas)
-        let args = textArea.value.split(' ').join('').split(/\n/).filter((e) => e)
+        let args = textArea.value.split(' ').join('').split(';').join('\n').split(/\n/).filter((e) => e)
         let canvasA = document.getElementById(canvas);
         let ctxA = canvasA.getContext("2d");
         let blocs = []
+        let line = 0
+        let blocsPlace = []
 
         let destination = {}
 
@@ -73,17 +75,71 @@ function prout(canvas, area, style) {
             }
         })
 
-        blocs.map((x) => {//a modifier il faut  check si dans la liste des destination ils peux aller a plusieurs endroit
-            //dans ce cas il faut mettre en bas ou a droite ou en diagonale en bas
-            TX.push(TX.length * 100)
-            TY.push(20)
-            Tache(ctxA, TX.length - 1, x, style);
+        blocs.map((x) => {
+            /*
+            Possible solution plus propre.
+
+            Il faut imaginer des niveau (colonnes)
+            on place d'abord celles qui n'ont personne qui vont vers ce bloc (n'apparait pas dans destination[[x]])
+            on place ensuite sur une deuxième colonne toutes les destination de la première colonne
+            sur la deuxième ligne les destination de la 3ème colonne.
+
+            (on a encore le droit a une putain de function récursive)
+
+            Pour les relié ca risque d'être plus chiant par contre.
+
+            la fonction "PoseTache" prend des position (1,2,3,4,...) en X et Y
+                    Tache(ctxA, Xpos ,Ypos, nom, style);
+
+            ca serait plus simple d'utiliser ca pour positionné. ( en vrai je suis pas ultra sur)
+             */
+
+            let flag = false
+            console.log("On place", x)
+            if (!blocsPlace.includes(x)) {
+                if (destination !== undefined) {
+                    console.log(x, destination[[x]])
+                    for (const [, destBloc] of Object.entries(destination)) {
+                        if (destBloc.includes(x))
+                            flag = true
+                    }
+                }
+                blocsPlace.push(x)
+
+                if (flag) { //quelqu'un a cette destination
+                    TX.push(TX.length * 125)
+                    if (destination[[x]] === undefined) {
+                        TY.push(0)
+                    } else {
+                        TY.push(line * 75)
+                    }
+                    Tache(ctxA, TX.length - 1, x, style);
+                } else {
+                    TX.push(0)
+                    TY.push(line * 150)
+                    line++
+                    Tache(ctxA, TX.length - 1, x, style);
+                }
+
+                // if (flag) { //quelqu'un a cette destination
+                //     TX.push(TX.length * 125)
+                //     if (destination[[x]] === undefined) {
+                //         PoseTache(ctxA, TX.length, 0, x, style);
+                //     } else {
+                //         PoseTache(ctxA, TX.length, line, x, style);
+                //     }
+                // } else {
+                //     PoseTache(ctxA, line, 0,x, style);
+                //     line++
+                // }
+
+            }
         })
 
-        blocs.map((x) => {
-            if (destination[[x]] !== undefined) {
-                destination[[x]].map((yuyu) => {
-                    Fleche_DG(ctxA, blocs.indexOf(x), blocs.indexOf(yuyu), style);
+        blocs.map((tache) => {//il faut d'abord que les blocs soient crée pour que ca fonctionne pour ca qu'il y a 2 boucles
+            if (destination[[tache]] !== undefined) {
+                destination[[tache]].map((destination) => {
+                    Fleche_DG(ctxA, blocs.indexOf(tache), blocs.indexOf(destination), style);
                 })
             }
         })
@@ -99,3 +155,18 @@ function prout(canvas, area, style) {
         TY = []
     });
 }
+
+/*
+A
+B
+C
+D
+E
+F
+A<B
+C<B
+B<D
+B<E
+D<F
+E<F
+ */

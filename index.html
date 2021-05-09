@@ -18,7 +18,7 @@
     </label>
     <p id="nbrMot">Il y a : <span>15</span> mots</p>
     <div class="container">
-        <canvas id="titatitutu" height="150px" width="700px"></canvas>
+        <canvas id="myCanvas" height="800px" width="700px"></canvas>
     </div>
     <div class="hide">
         <img src="assets/images/titi.gif" alt="titi" height="301" width="378">
@@ -32,9 +32,9 @@
     const urlParams = new URLSearchParams(queryString);
     if (urlParams.get('style') === "wow") {
         document.body.className = "wow"
-        prout("titatitutu", "textArea", "blue")
+        drawGraph("myCanvas", "textArea", "blue")
     } else {
-        prout("titatitutu", "textArea", "white")
+        drawGraph("myCanvas", "textArea", "white")
     }
 
 </script>
