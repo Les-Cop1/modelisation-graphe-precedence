@@ -87,11 +87,6 @@ function drawGraph(canvas, area, style) {
             (on a encore le droit a une putain de function récursive)
 
             Pour les relié ca risque d'être plus chiant par contre.
-
-            la fonction "PoseTache" prend des position (1,2,3,4,...) en X et Y
-                    Tache(ctxA, Xpos ,Ypos, nom, style);
-
-            ca serait plus simple d'utiliser ca pour positionné. ( en vrai je suis pas ultra sur)
              */
 
             let flag = false
@@ -107,39 +102,23 @@ function drawGraph(canvas, area, style) {
                 blocsPlace.push(x)
 
                 if (flag) { //quelqu'un a cette destination
-                    TX.push(TX.length * 125)
                     if (destination[[x]] === undefined) {
-                        TY.push(0)
+                        PoseTache(ctxA, TX.length ,1, x, style);
                     } else {
-                        TY.push(line * 75)
+                        PoseTache(ctxA, TX.length ,line, x, style);
                     }
-                    Tache(ctxA, TX.length - 1, x, style);
                 } else {
-                    TX.push(0)
-                    TY.push(line * 150)
+                    PoseTache(ctxA, 0,line, x, style);
                     line++
-                    Tache(ctxA, TX.length - 1, x, style);
                 }
-
-                // if (flag) { //quelqu'un a cette destination
-                //     TX.push(TX.length * 125)
-                //     if (destination[[x]] === undefined) {
-                //         PoseTache(ctxA, TX.length, 0, x, style);
-                //     } else {
-                //         PoseTache(ctxA, TX.length, line, x, style);
-                //     }
-                // } else {
-                //     PoseTache(ctxA, line, 0,x, style);
-                //     line++
-                // }
 
             }
         })
 
         blocs.map((tache) => {//il faut d'abord que les blocs soient crée pour que ca fonctionne pour ca qu'il y a 2 boucles
             if (destination[[tache]] !== undefined) {
-                destination[[tache]].map((destination) => {
-                    Fleche_DG(ctxA, blocs.indexOf(tache), blocs.indexOf(destination), style);
+                destination[[tache]].map((dest) => {
+                    Fleche_DG(ctxA, blocs.indexOf(tache), blocs.indexOf(dest), style);
                 })
             }
         })
@@ -148,11 +127,6 @@ function drawGraph(canvas, area, style) {
 
 // TODO : Afficher le nombre de mots
 //document.getElementById("nbrMot").innerText = textArea.value
-
-        blocs = []
-        arrows = []
-        TX = []
-        TY = []
     });
 }
 
@@ -169,4 +143,16 @@ B<D
 B<E
 D<F
 E<F
+ */
+
+/*
+A
+B
+C
+D
+B<C
+B<D
+D<C
+D<A
+C<A
  */
