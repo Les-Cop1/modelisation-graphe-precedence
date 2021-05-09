@@ -5,7 +5,7 @@
     <title>Graphe de précédence</title>
     <meta name="description" content="Site de fou">
     <script src="index.js"></script>
-    <script src="drawGraph.js"></script>
+    <script src="graph.js"></script>
     <link rel="stylesheet" href="style.css" />
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Dancing+Script&display=swap" rel="stylesheet">
@@ -33,9 +33,9 @@
     const urlParams = new URLSearchParams(queryString);
     if (urlParams.get('style') === "wow") {
         document.body.className = "wow"
-        drawGraph("myCanvas", "textArea", "blue")
+        graph("myCanvas", "textArea", "blue")
     } else {
-        drawGraph("myCanvas", "textArea", "white")
+        graph("myCanvas", "textArea", "white")
     }
 
 </script>
