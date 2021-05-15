@@ -5,56 +5,28 @@ let destination = {}
 let graph = (canvas, area, style) => {
     let textArea = document.getElementById(area)
     textArea.addEventListener("keyup", _ => {
-        let args = textAreaSplit(textArea.value)
+        let {blocs, fleches} = textAreaSplit(textArea.value)
+
+        let formatedBlocs = orderBlocks(blocs, fleches)
+
+        const firstCol = blocs.filter((bloc) => {
+            return formatedBlocs[bloc].parents.length === 0
+        })
+
+        // TODO : Ici ou avant le firstCol : supprimer les flèches inutiles
+
+        formatedBlocs = calculDistance(formatedBlocs, firstCol, 0)
+        const nbCol = Object.entries(formatedBlocs).reduce(maxColReducer, 0) + 1
+
+        const rows = Array.from({length: nbCol}, (v, k) => 0);
+        Object.entries(formatedBlocs).forEach(([name, bloc]) => {
+            formatedBlocs[name].row = (rows[bloc.col]++)
+        })
+
+        // TODO : Dessiner le graph avec les col et rows du formatedBlocs
 
 
-        let optimise = () => {
-            blocs.map((bloc) => {
-                optimiseBloc(bloc)
-            })
-        }
-
-        let optimiseBloc = (blc) => {
-            if (!tacheHaveDestination(destination, blc)) {
-                destination[[blc]].map((dest) => {
-                    let sorties = sortie(dest)
-                    sorties.shift()
-                    sorties.map((element) => {
-                        if (destination[[blc]].indexOf(element)) {
-                            destination[[blc]] = arrayRemove(destination[[blc]], element)
-                        }
-                    })
-                })
-            }
-        }
-
-        let sortie = (dest) => {
-            let array = []
-            array.push(dest)
-            if (!tacheHaveDestination(destination, dest)) {
-                let sortieDest = sortie(destination[[dest]])
-                sortieDest.map(desti => {
-                    desti = stringToArray(desti)
-                    desti.map((strDestination) => {
-                        array.push(strDestination)
-                    })
-                })
-            }
-            return array
-        }
-
-        let distanceInit = () => {
-            distance = []
-            blocs.map(elt => {
-                distance[[elt]] = {}
-                blocs.map(pos => {
-                    distance[[elt]][[pos]] = 0
-                })
-                distance[[elt]][[elt]] = 1
-            })
-        }
-
-        args.map((ligne) => {
+        /*args.map((ligne) => {
             if (isTache(ligne)) {
                 if (!blocs.includes(ligne))
                     blocs.push(ligne)
@@ -74,19 +46,117 @@ let graph = (canvas, area, style) => {
                     optimise()
                 }
             }
-        })
+        })*/
 
 
-        drawGraph(canvas, style, blocs, destination)
-        console.log("Liste des destination possible :", destination)
+        /*drawGraph(canvas, style, blocs, destination)
 
         for (const prop in destination) {
             distance[[prop]][[destination[prop]]] = distance[[prop]][[prop]] + 1
         }
-        console.log("Liste des distance :", distance)
-        updateDistance()
+        updateDistance()*/
     });
 }
+
+
+const textAreaSplit = (string) => {
+    let text = string.replace(' ', ';').replace(',', ';').replace(/\\[rn]|[\r\n]/g,";")
+    const groups = [...new Set(text.split(';'))]
+    text = text.replace(new RegExp("[>|<–]", "g"), ";")
+    const blocs = [...new Set(text.split(';'))]
+    return {
+        blocs,
+        fleches: groups.filter(a=> (a.includes('>') || a.includes('<')))
+    }
+}
+
+const orderBlocks = (blocs, fleches) => {
+    let result = {}
+    blocs.forEach(bloc => {
+        result[bloc] = {
+            name: bloc,
+            col: null,
+            row: null,
+            enfants: [],
+            parents: []
+        }
+    })
+    fleches.forEach(fleche => {
+        let parent, enfant
+        if (fleche.includes('<')) {
+            [parent, enfant] = fleche.split('<')
+        } else if (fleche.includes('>')) {
+            [enfant, parent] = fleche.split('>')
+        }
+        result[parent].enfants.push(enfant)
+        result[enfant].parents.push(parent)
+    })
+    return result
+}
+
+const calculDistance = (formatedBlocs, currentCol, distance) => {
+    currentCol.forEach((bloc) => {
+        formatedBlocs[bloc].col = distance
+        formatedBlocs = calculDistance(formatedBlocs, formatedBlocs[bloc].enfants, distance + 1)
+    })
+    return formatedBlocs
+}
+
+const maxColReducer = (maxCol, currentValue) => {
+    const currentCol = currentValue[1].col
+    return maxCol < currentCol ? currentCol : maxCol
+}
+
+
+// Félix :
+
+
+let optimise = () => {
+    blocs.map((bloc) => {
+        optimiseBloc(bloc)
+    })
+}
+
+let optimiseBloc = (blc) => {
+    if (!tacheHaveDestination(destination, blc)) {
+        destination[[blc]].map((dest) => {
+            let sorties = sortie(dest)
+            sorties.shift()
+            sorties.map((element) => {
+                if (destination[[blc]].indexOf(element)) {
+                    destination[[blc]] = arrayRemove(destination[[blc]], element)
+                }
+            })
+        })
+    }
+}
+
+let sortie = (dest) => {
+    let array = []
+    array.push(dest)
+    if (!tacheHaveDestination(destination, dest)) {
+        let sortieDest = sortie(destination[[dest]])
+        sortieDest.map(desti => {
+            desti = stringToArray(desti)
+            desti.map((strDestination) => {
+                array.push(strDestination)
+            })
+        })
+    }
+    return array
+}
+
+let distanceInit = () => {
+    distance = []
+    blocs.map(elt => {
+        distance[[elt]] = {}
+        blocs.map(pos => {
+            distance[[elt]][[pos]] = 0
+        })
+        distance[[elt]][[elt]] = 1
+    })
+}
+
 const distanceUpdated = []
 
 const distanceCalcul = (tache, destinationTache) => {
@@ -194,17 +264,11 @@ const stringToArray = str => {
 
 const tacheHaveDestination = (destination, tache) => destination[[tache]] === undefined
 
-const textAreaSplit = (string) => {
-    string = string.split(' ').join('')//trim du bled
-    string = string.split(';').join('\n')//permet d'avoir des lignes séparé par des ";"
-    string = string.split(/\n/)//crée un tableau tout les "\n"
-
-    return string.filter((e) => e) //supprime les lignes en double
-}
-
 const isTache = str => !str.includes("<")
 
 const equals = (a, b) => JSON.stringify(a) === JSON.stringify(b);
+
+
 
 
 /*
