@@ -1,10 +1,12 @@
+let distance = {}
+let blocs = []
+let destination = {}
+
 let graph = (canvas, area, style) => {
     let textArea = document.getElementById(area)
     textArea.addEventListener("keyup", _ => {
         let args = textAreaSplit(textArea.value)
-        let blocs = []
 
-        let destination = {}
 
         let optimise = () => {
             blocs.map((bloc) => {
@@ -41,11 +43,22 @@ let graph = (canvas, area, style) => {
             return array
         }
 
+        let distanceInit = () => {
+            distance = []
+            blocs.map(elt => {
+                distance[[elt]] = {}
+                blocs.map(pos => {
+                    distance[[elt]][[pos]] = 0
+                })
+                distance[[elt]][[elt]] = 1
+            })
+        }
 
         args.map((ligne) => {
             if (isTache(ligne)) {
                 if (!blocs.includes(ligne))
                     blocs.push(ligne)
+                distanceInit();
             } else {
                 //récupère les flèches exemple : T1<T2
                 let arrow = ligne.split("<")
@@ -63,10 +76,54 @@ let graph = (canvas, area, style) => {
             }
         })
 
-        drawGraph(canvas, style, blocs, destination)
 
+        drawGraph(canvas, style, blocs, destination)
         console.log("Liste des destination possible :", destination)
+
+        for (const prop in destination) {
+            distance[[prop]][[destination[prop]]] = distance[[prop]][[prop]] + 1
+        }
+        console.log("Liste des distance :", distance)
+        updateDistance()
     });
+}
+const distanceUpdated = []
+
+const distanceCalcul = (tache, destinationTache) => {
+    console.log(destinationTache)
+    let totaldesti = 0
+    destinationTache.map((property) => {
+        totaldesti += distance[[tache]][[property]]
+    })
+    console.log("totaldesti", totaldesti)
+    if (totaldesti > 1) {
+        destinationTache.map((elt) => {
+            distanceUpdated.push(tache)
+            distanceCalcul(elt, destination[[elt]])
+            for (const eltnext in destination[[elt]]) {
+                if (eltnext !== tache) {
+                    distance[[tache]][[eltnext]] = eltnext + 1;
+                }
+            }
+        })
+    } else {
+        distanceUpdated.push(tache)
+    }
+}
+
+const updateDistance = () => {
+    console.log("bloc", blocs)
+    console.log("distanceUpdated", distanceUpdated)
+    console.log(blocs !== distanceUpdated)
+    if (!equals(blocs, distanceUpdated)) {
+        blocs.map((elt) => {
+            if (!distanceUpdated.includes(elt)) {
+                distanceCalcul(elt, destination[[elt]])
+            }
+        })
+        console.log("Liste des distance :", distance)
+        updateDistance();
+    }
 }
 
 
@@ -146,6 +203,20 @@ const textAreaSplit = (string) => {
 }
 
 const isTache = str => !str.includes("<")
+
+const equals = (a, b) => JSON.stringify(a) === JSON.stringify(b);
+
+
+/*
+T1
+T2
+T3
+T4
+T5
+T1<T2
+T2<T3
+T4<T5
+ */
 
 /*
 A
