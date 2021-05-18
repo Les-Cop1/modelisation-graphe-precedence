@@ -23,6 +23,36 @@ textarea {
     min-height: 20vh;
 }
 
+button {
+    margin: 1rem;
+    padding: 1rem 1.5rem;
+    border-radius: 25px;
+    background-color: #1da1f2;
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-size: 1.2rem;
+    transition: .2s ease-in-out;
+}
+
+button:hover {
+    background-color: #1a91da;
+    color: white;
+}
+
+.wow button {
+    border-radius: 0;
+    padding: .5rem 1rem;
+    background-color: yellow;
+    color: red;
+    border: 1px solid #00008b;
+}
+
+.wow button:hover {
+    background-color: red;
+    color: white;
+}
+
 textarea:focus {
     border-color: white;
     outline: none;
@@ -30,6 +60,18 @@ textarea:focus {
 
 .hide {
     display: none;
+}
+
+.images {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-gap: 1px 9px;
+    grid-auto-flow: row;
+}
+
+.images > img {
+    height: auto;
+    width: 20vw;
 }
 
 body.wow {
@@ -45,7 +87,7 @@ body.wow {
     padding: 1rem;
     color: #00008b;
     width: 90%;
-    height: 80vh;
+    height: 100%;
 }
 
 .wow h1{
