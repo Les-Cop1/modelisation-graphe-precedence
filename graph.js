@@ -26,16 +26,18 @@ const displayGraph = (canvas, area, style, background, backgroundcolored, etape)
         formatedBlocs[name].row = (rows[bloc.col]++)
     })
 
-    console.log(formatedBlocs)
 
     drawGraph(canvas, style, background, backgroundcolored, etape, formatedBlocs)
 }
 
 
 const textAreaSplit = (string) => {
-    let text = string.replace(' ', ';').replace(',', ';').replace(/\\[rn]|[\r\n]/g, ";").replace(";;", ";")
+    let text = string.replaceAll(' ', ';')
+        .replaceAll(',', ';')
+        .replaceAll(/\\[rn]|[\r\n]/g, ";")
+        .replaceAll(";;", ";")
     const groups = [...new Set(text.split(';'))]
-    text = text.replace(new RegExp("[>|<–]", "g"), ";")
+    text = text.replaceAll(new RegExp("[>|<–]", "g"), ";")
     const blocs = [...new Set(text.split(';'))]
     return {
         blocs,
@@ -87,19 +89,10 @@ const maxColReducer = (maxCol, currentValue) => {
 }
 
 let optimise = (formatedBlocs) => {
-    Object.keys(formatedBlocs).forEach((bloc) => {
-        const parents = bloc.parents
-        parents.find((parent)=> {
-
-        })
-    })
+    for (const key of Object.keys(formatedBlocs)) {
+        optimiseBloc(key, formatedBlocs)
+    }
 }
-
-// let optimise = (formatedBlocs) => {
-//     for (const key of Object.keys(formatedBlocs)) {
-//         optimiseBloc(key, formatedBlocs)
-//     }
-// }
 
 let optimiseBloc = (blc, desti) => {
     if (desti[[blc]].enfants.length !== 0) {
@@ -141,3 +134,16 @@ const drawGraph = (canvas, style, background, backgroundcolored, etape, formated
 const arrayRemove = (arr, value) => {
     return arr.filter(ele => ele !== value);
 }
+
+/*
+A<B
+B<C
+A<C
+A<E
+E<C
+D<E
+E<F
+F<G
+D<G
+C<G
+ */
