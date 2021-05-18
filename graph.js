@@ -26,6 +26,8 @@ const displayGraph = (canvas, area, style, background, backgroundcolored, etape)
         formatedBlocs[name].row = (rows[bloc.col]++)
     })
 
+    console.log(formatedBlocs)
+
     drawGraph(canvas, style, background, backgroundcolored, etape, formatedBlocs)
 }
 
@@ -70,7 +72,7 @@ const orderBlocks = (blocs, fleches) => {
 const calculDistance = (formatedBlocs, currentCol, distance) => {
     currentCol.forEach((bloc) => {
         if (formatedBlocs[bloc].col !== null) {
-            formatedBlocs[bloc].col = formatedBlocs[bloc].col < distance ? formatedBlocs[bloc].col : distance
+            formatedBlocs[bloc].col = formatedBlocs[bloc].col > distance ? formatedBlocs[bloc].col : distance
         } else {
             formatedBlocs[bloc].col = distance
         }

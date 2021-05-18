@@ -17,7 +17,7 @@
         <textarea id="textArea"></textarea>
     </label>
     <!--    au final peut être mettre un bouton qui tri les déclaration de tache puis les liens-->
-    <button type="button">aaaa</button>
+    <button type="button">Opération suivante</button>
     <div class="container">
         <canvas id="myCanvas" height="300" width="700"></canvas>
     </div>
@@ -38,9 +38,9 @@
     const urlParams = new URLSearchParams(queryString);
     if (urlParams.get('style') === "wow") {
         document.body.className = "wow"
-        initListeners("myCanvas", "textArea", "blue", "red", "yellow")
+        initListeners("myCanvas", "textArea", "blue", "transparent", "red")
     } else {
-        initListeners("myCanvas", "textArea", "white", "darkblue", "blue")
+        initListeners("myCanvas", "textArea", "white", "transparent", "#1a91da")
     }
 </script>
 </body>
