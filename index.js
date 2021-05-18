@@ -114,7 +114,7 @@ function Dessiner_Fleche_BH(ctx, p_XA, p_YA, p_XB, p_YB, p_Color) {
     Dessiner_Segment(ctx, XM, YM, XB, YB, p_Color);
 } // >>>> Dessiner_Fleche_BH
 
-function Dessiner_RECT(ctx, XD, YD, WW, HH, p_Color) {
+function Dessiner_RECT(ctx, XD, YD, WW, HH, p_Color, p_Background) {
     ctx.beginPath();
     ctx.moveTo(XD, YD);
     ctx.lineTo(XD, YD + HH);
@@ -123,11 +123,13 @@ function Dessiner_RECT(ctx, XD, YD, WW, HH, p_Color) {
     ctx.lineTo(XD, YD);
     ctx.strokeStyle = p_Color;
     ctx.stroke();
+    ctx.fillStyle = p_Background;
+    ctx.fill();
     ctx.closePath();
 } // >>>> Dessiner_RECT
 
-function Dessiner_TACHE(ctx, p_X, p_Y, p_Nom, p_Color) {
-    Dessiner_RECT(ctx, p_X, p_Y, 40, 40, p_Color);
+function Dessiner_TACHE(ctx, p_X, p_Y, p_Nom, p_Color, p_Background) {
+    Dessiner_RECT(ctx, p_X, p_Y, 40, 40, p_Color, p_Background);
 
     ctx.beginPath();
     ctx.font = '18px serif';
@@ -141,7 +143,7 @@ function Dessiner_TACHE(ctx, p_X, p_Y, p_Nom, p_Color) {
     ctx.closePath();
 } // >>>> Dessiner_TACHE
 
-function PoseTache(ctx, p_NX, p_NY, p_Nom, p_Color) {
+function PoseTache(ctx, p_NX, p_NY, p_Nom, p_Color, p_Background) {
     const BD = 40;
     const DX = 80;
     const DY = 80;
@@ -149,7 +151,7 @@ function PoseTache(ctx, p_NX, p_NY, p_Nom, p_Color) {
     const PosY = BD + p_NY * DY;
     TX.push(PosX)
     TY.push(PosY)
-    Dessiner_TACHE(ctx, PosX, PosY, p_Nom, p_Color);
+    Dessiner_TACHE(ctx, PosX, PosY, p_Nom, p_Color, p_Background);
 }
 
 function Tache(ctx, p_Num, p_Nom, p_Color) {
