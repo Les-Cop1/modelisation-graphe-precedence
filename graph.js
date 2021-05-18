@@ -1,4 +1,4 @@
-let graph = (canvas, area, style) => {
+let graph = (canvas, area, style, background) => {
     let textArea = document.getElementById(area)
     textArea.addEventListener("keyup", _ => {
         let {blocs, fleches} = textAreaSplit(textArea.value)
@@ -19,7 +19,7 @@ let graph = (canvas, area, style) => {
             formatedBlocs[name].row = (rows[bloc.col]++)
         })
 
-        drawGraph(canvas, style, formatedBlocs, firstCol)
+        drawGraph(canvas, style, background, formatedBlocs)
     });
 }
 
@@ -42,6 +42,7 @@ const orderBlocks = (blocs, fleches) => {
             position: null,
             col: null,
             row: null,
+            remplit: false,
             enfants: [],
             parents: []
         }
@@ -95,7 +96,7 @@ let optimiseBloc = (blc, desti) => {
     }
 }
 
-const drawGraph = (canvas, style, formatedBlocs, firstCol) => {
+const drawGraph = (canvas, style, background, formatedBlocs) => {
 
     Clear_Canvas(canvas)
 
@@ -104,7 +105,7 @@ const drawGraph = (canvas, style, formatedBlocs, firstCol) => {
     let positiontime = 0
 
     Object.entries(formatedBlocs).forEach(([key, element]) => {
-        PoseTache(ctxA, element.col, element.row, element.name, style);
+        PoseTache(ctxA, element.col, element.row, element.name, style, background);
         formatedBlocs[key].position = positiontime++
 
     })
