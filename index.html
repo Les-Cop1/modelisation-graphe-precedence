@@ -16,11 +16,8 @@
     <label>
         <textarea id="textArea"></textarea>
     </label>
-    <script>
-        let etape = 0
-    </script>
     <!--    au final peut être mettre un bouton qui tri les déclaration de tache puis les liens-->
-    <button type="button" onclick='graph("myCanvas", "textArea", "blue","white","pink",etape++)'>aaaa</button>
+    <button type="button">aaaa</button>
     <div class="container">
         <canvas id="myCanvas" height="300" width="700"></canvas>
     </div>
@@ -41,11 +38,10 @@
     const urlParams = new URLSearchParams(queryString);
     if (urlParams.get('style') === "wow") {
         document.body.className = "wow"
-        graph("myCanvas", "textArea", "blue", "white", "pink",0)
+        initListeners("myCanvas", "textArea", "blue", "white", "pink")
     } else {
-        graph("myCanvas", "textArea", "white", "black", "pink",0)
+        initListeners("myCanvas", "textArea", "blue", "white", "pink")
     }
-
 </script>
 </body>
 </html>

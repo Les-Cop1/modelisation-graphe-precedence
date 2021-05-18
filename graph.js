@@ -1,26 +1,32 @@
-let graph = (canvas, area, style, background, backgroundcolored,etape) => {
+const initListeners = (canvas, area, style, background, backgroundcolored) => {
+    var etape = 0
     let textArea = document.getElementById(area)
-    textArea.addEventListener("keyup", _ => {
-        let {blocs, fleches} = textAreaSplit(textArea.value)
+    let boutonBeau = document.getElementsByTagName('button')[0]
+    textArea.addEventListener("keyup", _ => displayGraph(canvas, area, style, background, backgroundcolored, 0));
+    boutonBeau.addEventListener("click", _ => displayGraph(canvas, area, style, background, backgroundcolored, ++etape))
+}
 
-        let formatedBlocs = orderBlocks(blocs, fleches)
+const displayGraph = (canvas, area, style, background, backgroundcolored, etape) => {
+    let textArea = document.getElementById(area)
+    let {blocs, fleches} = textAreaSplit(textArea.value)
 
-        optimise(formatedBlocs)
+    let formatedBlocs = orderBlocks(blocs, fleches)
 
-        const firstCol = blocs.filter((bloc) => {
-            return formatedBlocs[bloc].parents.length === 0
-        })
+    optimise(formatedBlocs)
 
-        formatedBlocs = calculDistance(formatedBlocs, firstCol, 0)
-        const nbCol = Object.entries(formatedBlocs).reduce(maxColReducer, 0) + 1
+    const firstCol = blocs.filter((bloc) => {
+        return formatedBlocs[bloc].parents.length === 0
+    })
 
-        const rows = Array.from({length: nbCol}, () => 0);
-        Object.entries(formatedBlocs).forEach(([name, bloc]) => {
-            formatedBlocs[name].row = (rows[bloc.col]++)
-        })
+    formatedBlocs = calculDistance(formatedBlocs, firstCol, 0)
+    const nbCol = Object.entries(formatedBlocs).reduce(maxColReducer, 0) + 1
 
-        drawGraph(canvas, style, background, backgroundcolored,etape, formatedBlocs,)
-    });
+    const rows = Array.from({length: nbCol}, () => 0);
+    Object.entries(formatedBlocs).forEach(([name, bloc]) => {
+        formatedBlocs[name].row = (rows[bloc.col]++)
+    })
+
+    drawGraph(canvas, style, background, backgroundcolored,etape, formatedBlocs)
 }
 
 
