@@ -87,10 +87,19 @@ const maxColReducer = (maxCol, currentValue) => {
 }
 
 let optimise = (formatedBlocs) => {
-    for (const key of Object.keys(formatedBlocs)) {
-        optimiseBloc(key, formatedBlocs)
-    }
+    Object.keys(formatedBlocs).forEach((bloc) => {
+        const parents = bloc.parents
+        parents.find((parent)=> {
+
+        })
+    })
 }
+
+// let optimise = (formatedBlocs) => {
+//     for (const key of Object.keys(formatedBlocs)) {
+//         optimiseBloc(key, formatedBlocs)
+//     }
+// }
 
 let optimiseBloc = (blc, desti) => {
     if (desti[[blc]].enfants.length !== 0) {
