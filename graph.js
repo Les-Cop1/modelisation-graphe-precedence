@@ -2,7 +2,7 @@ const initListeners = (canvas, area, style, background, backgroundcolored) => {
     var etape = 0
     let textArea = document.getElementById(area)
     let boutonBeau = document.getElementsByTagName('button')[0]
-    textArea.addEventListener("keyup", _ => displayGraph(canvas, area, style, background, backgroundcolored, 0));
+    textArea.addEventListener("keyup", _ => displayGraph(canvas, area, style, background, backgroundcolored, etape = 0));
     boutonBeau.addEventListener("click", _ => displayGraph(canvas, area, style, background, backgroundcolored, ++etape))
 }
 
@@ -26,7 +26,7 @@ const displayGraph = (canvas, area, style, background, backgroundcolored, etape)
         formatedBlocs[name].row = (rows[bloc.col]++)
     })
 
-    drawGraph(canvas, style, background, backgroundcolored,etape, formatedBlocs)
+    drawGraph(canvas, style, background, backgroundcolored, etape, formatedBlocs)
 }
 
 
@@ -103,7 +103,7 @@ let optimiseBloc = (blc, desti) => {
     }
 }
 
-const drawGraph = (canvas, style, background, backgroundcolored,etape, formatedBlocs) => {
+const drawGraph = (canvas, style, background, backgroundcolored, etape, formatedBlocs) => {
 
     Clear_Canvas(canvas)
 
@@ -112,8 +112,6 @@ const drawGraph = (canvas, style, background, backgroundcolored,etape, formatedB
     let positiontime = 0
 
     Object.entries(formatedBlocs).forEach(([key, element]) => {
-        console.log("etape", etape)
-        console.log("col", element.col)
         if (element.col < etape) {
             PoseTache(ctxA, element.col, element.row, element.name, style, backgroundcolored);
         } else {
@@ -132,41 +130,3 @@ const drawGraph = (canvas, style, background, backgroundcolored,etape, formatedB
 const arrayRemove = (arr, value) => {
     return arr.filter(ele => ele !== value);
 }
-
-/*
-T1
-T2
-T3
-T4
-T5
-T1<T2
-T2<T3
-T4<T5
- */
-
-/*
-A
-B
-C
-D
-E
-F
-A<B
-C<B
-B<D
-B<E
-D<F
-E<F
- */
-
-/*
-A
-B
-C
-D
-B<C
-B<D
-D<C
-D<A
-C<A
- */
