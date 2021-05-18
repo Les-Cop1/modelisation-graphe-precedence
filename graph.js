@@ -3,9 +3,6 @@ let graph = (canvas, area, style) => {
     textArea.addEventListener("keyup", _ => {
         let {blocs, fleches} = textAreaSplit(textArea.value)
 
-        console.log("blocs", blocs)
-        console.log("fleches", fleches)
-
         let formatedBlocs = orderBlocks(blocs, fleches)
 
         optimise(formatedBlocs)
@@ -22,13 +19,12 @@ let graph = (canvas, area, style) => {
             formatedBlocs[name].row = (rows[bloc.col]++)
         })
 
-        // TODO : Dessiner le graph avec les col et rows du formatedBlocs
         drawGraph(canvas, style, formatedBlocs, firstCol)
     });
 }
 
 const textAreaSplit = (string) => {
-    let text = string.replace(' ', ';').replace(',', ';').replace(/\\[rn]|[\r\n]/g, ";")
+    let text = string.replace(' ', ';').replace(',', ';').replace(/\\[rn]|[\r\n]/g, ";").replace(";;", ";")
     const groups = [...new Set(text.split(';'))]
     text = text.replace(new RegExp("[>|<–]", "g"), ";")
     const blocs = [...new Set(text.split(';'))]
@@ -43,6 +39,7 @@ const orderBlocks = (blocs, fleches) => {
     blocs.forEach(bloc => {
         result[bloc] = {
             name: bloc,
+            position: null,
             col: null,
             row: null,
             enfants: [],
@@ -104,53 +101,23 @@ const drawGraph = (canvas, style, formatedBlocs, firstCol) => {
 
     let canvasA = document.getElementById(canvas);
     let ctxA = canvasA.getContext("2d");
+    let positiontime = 0
 
-    let line = 0
+    Object.entries(formatedBlocs).forEach(([key, element]) => {
+        PoseTache(ctxA, element.col, element.row, element.name, style);
+        formatedBlocs[key].position = positiontime++
 
-    listeTaches.map((tache) => {
-        let flag = false
-        console.log("On place", tache)
-        if (listeDestination !== undefined) {
-            console.log(`destination de ${tache}`, listeDestination[[tache]])
-            for (const [, destBloc] of Object.entries(listeDestination)) {
-                if (destBloc.includes(tache))
-                    flag = true
-            }
-        }
-
-        if (flag) { //quelqu'un a cette destination
-            if (tacheDontHaveDestination(listeDestination, tache)) {
-                PoseTache(ctxA, TX.length, 1, tache, style);
-            } else {
-                PoseTache(ctxA, TX.length, line, tache, style);
-            }
-        } else {
-            PoseTache(ctxA, 0, line, tache, style);
-            line++
-        }
     })
-
-    listeTaches.map((tache) => {//il faut d'abord que les blocs soient crée pour que ca fonctionne pour ca qu'il y a 2 boucles
-        if (!tacheDontHaveDestination(listeDestination, tache)) {
-            listeDestination[[tache]].map((dest) => {
-                Fleche_DG(ctxA, listeTaches.indexOf(tache), listeTaches.indexOf(dest), style);
-            })
-        }
+    Object.entries(formatedBlocs).forEach(([key, element]) => {//il faut d'abord que les blocs soient crée pour que ca fonctionne pour ca qu'il y a 2 boucles
+        element.enfants.forEach((elementchild) => {
+            Fleche_DG(ctxA, element.position, formatedBlocs[elementchild].position, style);
+        })
     })
 }
 
 const arrayRemove = (arr, value) => {
     return arr.filter(ele => ele !== value);
 }
-
-const stringToArray = str => {
-    if (!Array.isArray(str)) {
-        return [str]
-    } else
-        return str;
-}
-
-const tacheDontHaveDestination = (tache, destination) => destination[[tache]].enfants.length === 0
 
 /*
 T1

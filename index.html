@@ -6,38 +6,38 @@
     <meta name="description" content="Site de fou">
     <script src="index.js"></script>
     <script src="graph.js"></script>
-    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="style.css"/>
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Dancing+Script&display=swap" rel="stylesheet">
 </head>
 <body>
-    <div>
-        <h1>Modélisation d'un graphe de précédence</h1>
-        <label>
-            <textarea id="textArea"></textarea>
-        </label>
+<div>
+    <h1>Modélisation d'un graphe de précédence</h1>
+    <label>
+        <textarea id="textArea"></textarea>
+    </label>
     <!--    au final peut être mettre un bouton qui tri les déclaration de tache puis les liens-->
-        <p id="nbrMot">Il y a : <span>15</span> mots</p>
-        <div class="container">
-            <canvas id="myCanvas" height="800px" width="700px"></canvas>
-        </div>
-        <div class="hide">
-            <img src="assets/images/titi.gif" alt="titi" height="301" width="378">
-            Site optimisé en 1024x768
-        </div>
+    <button type="button">aaaa</button>
+    <div class="container">
+        <canvas id="myCanvas" height="800px" width="700px"></canvas>
     </div>
-    <script>
-        let TX = [];
-        let TY = [];
-        const queryString = window.location.search;
-        const urlParams = new URLSearchParams(queryString);
-        if (urlParams.get('style') === "wow") {
-            document.body.className = "wow"
-            graph("myCanvas", "textArea", "blue")
-        } else {
-            graph("myCanvas", "textArea", "white")
-        }
+    <div class="hide">
+        <img src="assets/images/titi.gif" alt="titi" height="301" width="378">
+        Site optimisé en 1024x768
+    </div>
+</div>
+<script>
+    let TX = [];
+    let TY = [];
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+    if (urlParams.get('style') === "wow") {
+        document.body.className = "wow"
+        graph("myCanvas", "textArea", "blue")
+    } else {
+        graph("myCanvas", "textArea", "white")
+    }
 
-    </script>
+</script>
 </body>
 </html>
