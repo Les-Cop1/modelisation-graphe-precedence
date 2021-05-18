@@ -1,4 +1,4 @@
-let graph = (canvas, area, style, background) => {
+let graph = (canvas, area, style, background, backgroundcolored,etape) => {
     let textArea = document.getElementById(area)
     textArea.addEventListener("keyup", _ => {
         let {blocs, fleches} = textAreaSplit(textArea.value)
@@ -14,14 +14,15 @@ let graph = (canvas, area, style, background) => {
         formatedBlocs = calculDistance(formatedBlocs, firstCol, 0)
         const nbCol = Object.entries(formatedBlocs).reduce(maxColReducer, 0) + 1
 
-        const rows = Array.from({length: nbCol}, (v, k) => 0);
+        const rows = Array.from({length: nbCol}, () => 0);
         Object.entries(formatedBlocs).forEach(([name, bloc]) => {
             formatedBlocs[name].row = (rows[bloc.col]++)
         })
 
-        drawGraph(canvas, style, background, formatedBlocs)
+        drawGraph(canvas, style, background, backgroundcolored,etape, formatedBlocs,)
     });
 }
+
 
 const textAreaSplit = (string) => {
     let text = string.replace(' ', ';').replace(',', ';').replace(/\\[rn]|[\r\n]/g, ";").replace(";;", ";")
@@ -96,7 +97,7 @@ let optimiseBloc = (blc, desti) => {
     }
 }
 
-const drawGraph = (canvas, style, background, formatedBlocs) => {
+const drawGraph = (canvas, style, background, backgroundcolored,etape, formatedBlocs) => {
 
     Clear_Canvas(canvas)
 
@@ -105,11 +106,17 @@ const drawGraph = (canvas, style, background, formatedBlocs) => {
     let positiontime = 0
 
     Object.entries(formatedBlocs).forEach(([key, element]) => {
-        PoseTache(ctxA, element.col, element.row, element.name, style, background);
+        console.log("etape", etape)
+        console.log("col", element.col)
+        if (element.col < etape) {
+            PoseTache(ctxA, element.col, element.row, element.name, style, backgroundcolored);
+        } else {
+            PoseTache(ctxA, element.col, element.row, element.name, style, background);
+        }
         formatedBlocs[key].position = positiontime++
 
     })
-    Object.entries(formatedBlocs).forEach(([key, element]) => {//il faut d'abord que les blocs soient crée pour que ca fonctionne pour ca qu'il y a 2 boucles
+    Object.entries(formatedBlocs).forEach(([, element]) => {//il faut d'abord que les blocs soient crée pour que ca fonctionne pour ca qu'il y a 2 boucles
         element.enfants.forEach((elementchild) => {
             Fleche_DG(ctxA, element.position, formatedBlocs[elementchild].position, style);
         })
