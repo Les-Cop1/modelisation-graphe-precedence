@@ -69,9 +69,20 @@ textarea:focus {
     grid-auto-flow: row;
 }
 
+.wow button {
+    cursor: url(https://cdn.custom-cursor.com/db/9340/32/among-us-naruto-cursor.png) , default!important;
+}
+
 .images > img {
     height: auto;
     width: 20vw;
+    cursor: url(https://cdn.custom-cursor.com/db/8020/32/sport-formula-1-cursor.png) , default!important;
+}
+.images > img cursor {
+    animation-duration: 4000ms;
+    animation-name: spin;
+    animation-iteration-count: infinite;
+    animation-timing-function: linear;
 }
 
 body.wow {
