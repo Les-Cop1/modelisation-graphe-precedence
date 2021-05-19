@@ -134,16 +134,3 @@ const drawGraph = (canvas, style, background, backgroundcolored, etape, formated
 const arrayRemove = (arr, value) => {
     return arr.filter(ele => ele !== value);
 }
-
-/*
-A<B
-B<C
-A<C
-A<E
-E<C
-D<E
-E<F
-F<G
-D<G
-C<G
- */
