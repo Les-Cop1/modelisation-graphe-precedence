@@ -32,13 +32,15 @@ const displayGraph = (canvas, area, style, background, backgroundcolored, etape)
 
 
 const textAreaSplit = (string) => {
-    let text = string.replaceAll(' ', ';')
-        .replaceAll(',', ';')
-        .replaceAll(/\\[rn]|[\r\n]/g, ";")
-        .replaceAll(";;", ";")
-    const groups = [...new Set(text.split(';'))]
+    let text = string
+                    .replaceAll(' ', ';')
+                    .replaceAll(',', ';')
+                    .replaceAll(/\\[rn]|[\r\n]/g, ";")
+                    .replaceAll(";;", ";")
+    let groups = [...new Set(text.split(';'))]
     text = text.replaceAll(new RegExp("[>|<–]", "g"), ";")
     const blocs = [...new Set(text.split(';'))]
+    if (blocs[blocs.length-1] === "") blocs.pop()
     return {
         blocs,
         fleches: groups.filter(a => (a.includes('>') || a.includes('<')))
