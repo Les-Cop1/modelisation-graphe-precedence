@@ -46,11 +46,13 @@ button:hover {
     background-color: yellow;
     color: red;
     border: 1px solid #00008b;
+    cursor:url(https://cdn.custom-cursor.com/db/7433/32/lifestyle-origami-butterfly-pointer.png) , pointer!important;
 }
 
 .wow button:hover {
     background-color: red;
     color: white;
+    cursor: pointer;
 }
 
 textarea:focus {
@@ -69,14 +71,18 @@ textarea:focus {
     grid-auto-flow: row;
 }
 
-.wow button {
-    cursor: url(https://cdn.custom-cursor.com/db/9340/32/among-us-naruto-cursor.png) , default!important;
+.wow {
+    cursor:url(https://cdn.custom-cursor.com/db/7434/32/lifestyle-origami-butterfly-cursor.png) , default!important;
 }
 
 .images > img {
     height: auto;
     width: 20vw;
-    cursor: url(https://cdn.custom-cursor.com/db/8020/32/sport-formula-1-cursor.png) , default!important;
+    cursor:url(https://cdn.custom-cursor.com/db/7433/32/lifestyle-origami-butterfly-pointer.png) , pointer!important;
+}
+
+.wow img:hover {
+    cursor: pointer;
 }
 
 body.wow {
